@@ -18,7 +18,7 @@ p = [[1,0,1,0,0,0],
 n = len(p)
 m = len(p[0])
 
-# Declaared by party by bits
+# Declared bids by party by bits
 d = [[0 for j in range(m)] for i in range(n)]
 
 # Veto per round
