@@ -12,8 +12,9 @@ def show(intro, mat):
             print(mat[i][j], end = " " if j < m - 1 else "\n")
 
 # Bids by party by bits            
-p = [[1,0,1,0,0,0],
-     [1,0,0,0,0,1]]
+p = [[0,1,0,1,0],
+     [0,1,0,0,1],
+     [0,0,1,1,1]]
 
 n = len(p)
 m = len(p[0])
@@ -41,7 +42,19 @@ for j in range(m):
         print("Party " + str(i) + " : p = " + str(p[i][j]) + " d* = " + str(d[i][j_star]) + " d = " + str(d[i][j]))
                     
         v[j] = 1 if v[j] or d[i][j] == 1 else 0
-    
+        
+        # Check logical conditions guaranteeing that parties are following the protocol
+        if j_star == -1:
+            # c0 must hold until first veto
+            c0 = p[i][j] == d[i][j]
+            assert(c0)
+        else:            
+            # c1 or c2 or c3 must hold after first veto
+            c1 = p[i][j] == 0 and d[i][j] == 0
+            c2 = p[i][j] == 1 and d[i][j_star] == 1 and d[i][j] == 1
+            c3 = d[i][j_star] == 0 and d[i][j] == 0                
+            assert(c1 or c2 or c3)
+        
     if v[j] == 1:
         print("\nVeto!")
         j_star = j     
@@ -49,4 +62,3 @@ for j in range(m):
 show("p = ", p)
 show("d = ", d)
 show("v = ", v)
-
