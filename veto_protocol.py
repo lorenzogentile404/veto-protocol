@@ -29,9 +29,9 @@ class Pedersen:
 pedersen = Pedersen()
 
 # Bids by party by bits
-generateBidsRandomly = True
+generate_bids_randomly = True
 
-if not(generateBidsRandomly):   
+if not(generate_bids_randomly):   
     p = [[0,1,0,1,0],
          [0,1,0,0,1],
          [0,0,1,1,1]]
