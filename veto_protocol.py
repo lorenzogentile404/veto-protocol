@@ -1,6 +1,6 @@
 import random 
 import functools
-from sympy import Rational
+from fractions import Fraction
 
 # Helper function to print a matrix nicely
 def show(intro, mat):
@@ -69,24 +69,24 @@ def prod(vec):
 def col(mat, index):
     return [e[index] for e in mat]
 
-Y = [[Rational(prod(col(X,j)[0:i]) , prod(col(X,j)[i+1:n])) for j in range(m)] for i in range(n)]        
+Y = [[Fraction(prod(col(X,j)[0:i]) , prod(col(X,j)[i+1:n])) for j in range(m)] for i in range(n)]        
 b = [[0 for j in range(m)] for i in range(n)]
 
 # Index of last veto (initialized to -1 arbitrarily)
-j_star = -1
+j_backarrow = -1
 
 # Veto protocol
 for j in range(m): # Rounds
     print("\nRound " + str(j))
-    print("j_star = " + str(j_star))
+    print("j_backarrow = " + str(j_backarrow))
     for i in range(n): # Parties
         
-        if j_star == -1: # No veto so far
+        if j_backarrow == -1: # No veto so far
             d[i][j] = p[i][j]
         else: # At least one veto
-            d[i][j] = 1 if p[i][j] and d[i][j_star] == 1 else 0
+            d[i][j] = 1 if p[i][j] and d[i][j_backarrow] == 1 else 0
             
-        print("Party " + str(i) + " : p = " + str(p[i][j]) + " d* = " + str(d[i][j_star]) + " d = " + str(d[i][j]))
+        print("Party " + str(i) + " : p = " + str(p[i][j]) + " d* = " + str(d[i][j_backarrow]) + " d = " + str(d[i][j]))
         
         # Compute result of veto protocol assuming d[i][j] is available
         # In the actual protocol commitments have to be used instead
@@ -100,15 +100,15 @@ for j in range(m): # Rounds
         
         # Check logical conditions guaranteeing that parties are following the protocol
         # In the actual protocol ZKP have to be used instead
-        if j_star == -1:
+        if j_backarrow == -1:
             # c0 must hold until first veto
             c0 = p[i][j] == d[i][j]
             assert(c0)
         else:            
             # c1 or c2 or c3 must hold after first veto
             c1 = p[i][j] == 0 and d[i][j] == 0
-            c2 = p[i][j] == 1 and d[i][j_star] == 1 and d[i][j] == 1
-            c3 = d[i][j_star] == 0 and d[i][j] == 0                
+            c2 = p[i][j] == 1 and d[i][j_backarrow] == 1 and d[i][j] == 1
+            c3 = p[i][j] == 1 and d[i][j_backarrow] == 0 and d[i][j] == 0                
             assert(c1 or c2 or c3)
 
     # Compute result of veto protocol from commitments     
@@ -117,7 +117,7 @@ for j in range(m): # Rounds
                   
     if v[j] == 1:
         print("\nVeto!")
-        j_star = j
+        j_backarrow = j
         assert(B != 1) # This check may fail with low probability
     else:
         # Check if B is equal to 1 (g**0) when there is no veto
