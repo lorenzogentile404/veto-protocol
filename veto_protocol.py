@@ -18,10 +18,10 @@ def show(intro, mat):
 
 # Class encapsulating Pedersen commitment parameters            
 class Pedersen:
-    # p, q primes such that p | q - 1
-    # G = {i^r mod q | i in Z_q* = {1,...,q-1}}    
-    p =  23 # Order of G
-    q =  47 # Operations inside G need to be executed modulus q
+    # p, q primes such that q | p - 1
+    # G = {a^r mod p | a in Z_p* = {1,...,p-1}}    
+    p =  47 # Operations inside G need to be executed modulus p
+    q =  23 # Order of G
     # Generators of G
     g =  42
     h =  4
@@ -51,9 +51,9 @@ d = [[0 for j in range(m)] for i in range(n)]
 # Veto per round
 v = [0 for i in range(m)]
 
-# Random elements of Z_p used for commitments
-x = [[random.randint(1,pedersen.p - 1) for j in range(m)] for i in range(n)]
-r = [[random.randint(1,pedersen.p - 1) for j in range(m)] for i in range(n)]
+# Random elements of Z_q used for commitments
+x = [[random.randint(1,pedersen.q - 1) for j in range(m)] for i in range(n)]
+r = [[random.randint(1,pedersen.q - 1) for j in range(m)] for i in range(n)]
 
 # Commitments 
 # X, R and Y are precomputed to simplify the script
